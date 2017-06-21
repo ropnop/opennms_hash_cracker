@@ -1,0 +1,10 @@
+hello
+mike
+password
+admin
+password123
+dummy
+foobar
+ranger
+opennms
+rtc
