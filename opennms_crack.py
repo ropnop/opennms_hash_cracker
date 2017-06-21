@@ -2,7 +2,7 @@
 
 import sys, os
 from xml.dom.minidom import parse
-from hashlib import sha256
+from hashlib import sha256, md5
 
 
 def extractHashes(usersfile):
@@ -22,10 +22,11 @@ def extractHashes(usersfile):
 
 	
 def getHexValues(passwordString, hasSalt=True):
-	hexstring = passwordString.decode('base64').encode('hex') # i hate working with bytes
 	if not hasSalt:
-		return '', hexstring
+		return None, passwordString
 	
+	hexstring = passwordString.decode('base64').encode('hex') # i hate working with bytes
+
 	pSalt = hexstring[:32]
 	pHash = hexstring[32:]
 	return pSalt, pHash
@@ -43,9 +44,17 @@ def doBrute(usersDict, wordlistFile, iterations=100000):
 				print "[*] Cracked!\t{} : {}".format(username, plaintext)
 
 	wordlist.close()
-
+	
 
 def checkPassword(plaintext, pHash, pSalt, iterations=100000):
+	if not pSalt: #its just an md5 hex string
+		s = md5(plaintext)
+		hexstring = s.hexdigest()
+		if pHash == hexstring.upper():
+			return True
+		else:
+			return False
+
 	testinput = pSalt.decode('hex')+plaintext
 	for i in range(0,iterations):
 		s = sha256(testinput)
@@ -73,7 +82,7 @@ if __name__ == '__main__':
 	print "[+] Extracting Hashes..."
 	usersDict = extractHashes(usersFile)
 	print "[+] Extracted {} user hashes".format(len(usersDict))
-	print "[+] Running crack with {}...".format(wordlistFile)
+	print "[+] Running crack with {}...\n".format(wordlistFile)
 
 	doBrute(usersDict, wordlistFile)
 	print "\n[*] ...done"
