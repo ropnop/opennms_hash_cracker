@@ -5,7 +5,7 @@ The default hashing scheme for OpenNMS uses a 16byte salt and 100,000 iterations
 
 There's a blogpost explaining the reasoning behind the tool and the steps taken in figuring out the hashes here:
 
-https://TODO
+https://blog.ropnop.com/cracking-opennms-password-hashes/
 
 ## Example Usage
 The OpenNMS source code has an example "users.xml" file [here](https://github.com/OpenNMS/opennms/blob/2b2ed9a50a88e9ce898842784ad3fcf2f6d1ae3f/features/springframework-security/src/test/resources/org/opennms/web/springframework/security/users.xml). This file is included in the repo as `test_users.xml`. A test wordlist with the known plaintexts is also included in `test_wordlist.txt`.
